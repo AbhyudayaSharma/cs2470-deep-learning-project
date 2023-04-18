@@ -17,7 +17,7 @@ function main() {
             const imgPath = path.join(dataPath, country, imgName);
             const extension = path.extname(imgName)
             const newPath = path.join(Math.random() > 0.8 ? testPath : trainPath,
-                `${slug}_${i.toString().padStart(3, '0')}.${extension}`);
+                `${slug}_${i.toString().padStart(5, '0')}${extension}`);
             fs.renameSync(imgPath, newPath);
         });
     });
