@@ -11,7 +11,7 @@ function main() {
 
     const countries = fs.readdirSync(dataPath);
     countries.forEach(country => {
-        const slug = country.trim().toLowerCase().replaceAll(/\s/, '_');
+        const slug = country.trim().toLowerCase().replace(/\s/g, '_');
 
         fs.readdirSync(path.join(dataPath, country)).forEach((imgName, i) => {
             const imgPath = path.join(dataPath, country, imgName);
