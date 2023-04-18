@@ -32,11 +32,11 @@ function main() {
                 trainCount++;
             }
 
-            console.log(`Renaming ${imgPath} to ${newPath}`);
-            // fs.renameSync(imgPath, newPath);
+            // console.log(`Renaming ${imgPath} to ${newPath}`);
+            fs.renameSync(imgPath, newPath);
         }
 
-        console.log(`${country}: ${trainCount} ${testCount}`);
+        console.log(`${country}: train=${trainCount} test=${testCount}`);
     });
 }
 
