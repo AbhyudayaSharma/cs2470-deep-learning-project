@@ -18,7 +18,8 @@ function main() {
             const extension = path.extname(imgName)
             const newPath = path.join(Math.random() > 0.8 ? testPath : trainPath,
                 `${slug}_${i.toString().padStart(5, '0')}${extension}`);
-            fs.renameSync(imgPath, newPath);
+            console.log(`Renaming ${imgPath} to ${newPath}`);
+            // fs.renameSync(imgPath, newPath);
         });
     });
 }
