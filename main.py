@@ -10,8 +10,11 @@ def main():
 
     train_dataset = ImageDataset(directory_path='/var/project/train_data')
     test_dataset = ImageDataset(directory_path='/var/project/test_data')
-    train_dataloader = DataLoader(dataset=train_dataset, batch_size=256, shuffle=True)
-    test_dataloader = DataLoader(dataset=test_dataset, batch_size=256, shuffle=True)
+
+
+
+    train_dataloader = DataLoader(dataset=train_dataset, batch_size=256)
+    test_dataloader = DataLoader(dataset=test_dataset, batch_size=256)
 
     for image_tensor, label in train_dataloader[:10] :
       print(image_tensor, label)

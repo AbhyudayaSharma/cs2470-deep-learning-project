@@ -1,4 +1,6 @@
 import os
+import random
+
 import torch
 import torchvision
 
@@ -14,7 +16,7 @@ class ImageDataset(torch.utils.data.IterableDataset):
 
     def __iter__(self) -> None:
         # get name of next image
-        for path in self.image_paths:
+        for path in random.shuffle(self.image_paths):
             # extract label from image name
             label = path.split(".")[0]
             label = label[: label.rindex('_')]
