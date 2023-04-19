@@ -12,7 +12,7 @@ class ImageDataset(torch.utils.data.IterableDataset):
     def __init__(self, directory_path) -> None:
         super(ImageDataset).__init__()
 
-        self.image_paths = os.scandir(path=directory_path)
+        self.image_paths = list(map(lambda x: x.name, os.scandir(path=directory_path)))
 
     def __iter__(self) -> None:
         # get name of next image
