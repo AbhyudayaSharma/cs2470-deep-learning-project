@@ -15,8 +15,10 @@ class ImageDataset(torch.utils.data.IterableDataset):
         self.image_paths = list(map(lambda x: x.name, os.scandir(path=directory_path)))
 
     def __iter__(self) -> None:
+        # shuffle the image paths
+        random.shuffle(self.image_paths)
         # get name of next image
-        for path in random.shuffle(self.image_paths):
+        for path in self.image_paths:
             # extract label from image name
             label = path.split(".")[0]
             label = label[: label.rindex('_')]
