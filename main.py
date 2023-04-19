@@ -17,11 +17,11 @@ def main():
     test_dataloader = DataLoader(dataset=test_dataset, batch_size=256)
 
     for i in range(10):
-        image_tensor, label = next(train_dataloader)
+        image_tensor, label = next(iter(train_dataloader))
         print(image_tensor, label)
 
     for i in range(10):
-        image_tensor, label = next(test_dataloader)
+        image_tensor, label = next(iter(test_dataloader))
         print(image_tensor, label)
 
 if __name__ == '__main__':
