@@ -16,11 +16,13 @@ def main():
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=256)
     test_dataloader = DataLoader(dataset=test_dataset, batch_size=256)
 
-    for image_tensor, label in list(train_dataloader)[:10] :
-      print(image_tensor, label)
+    for i in range(10):
+        image_tensor, label = next(train_dataloader)
+        print(image_tensor, label)
 
-    for image_tensor, label in list(test_dataloader)[:10] :
-      print(image_tensor, label)
+    for i in range(10):
+        image_tensor, label = next(test_dataloader)
+        print(image_tensor, label)
 
 if __name__ == '__main__':
     main()
