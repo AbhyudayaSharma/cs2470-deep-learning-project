@@ -12,6 +12,7 @@ class ImageDataset(torch.utils.data.IterableDataset):
     def __init__(self, directory_path) -> None:
         super(ImageDataset).__init__()
 
+        self.directory_path = directory_path
         self.image_paths = list(map(lambda x: x.name, os.scandir(path=directory_path)))
 
     def __iter__(self) -> None:
@@ -23,4 +24,4 @@ class ImageDataset(torch.utils.data.IterableDataset):
             label = path.split(".")[0]
             label = label[: label.rindex('_')]
             # return image as tensor and label
-            yield torchvision.io.read_image(path, mode=ImageReadMode.RGB), label
+            yield torchvision.io.read_image(os.path.join(self.directory_path, path), mode=ImageReadMode.RGB), label
