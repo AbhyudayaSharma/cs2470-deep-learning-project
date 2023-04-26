@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import DataLoader
-
+import math
 from preprocess import ImageDataset
 from model import SimpleConvModel
 
@@ -21,8 +21,8 @@ def main():
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
     test_dataloader = DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE)
 
-    train_steps = len(train_dataloader.dataset) // BATCH_SIZE
-    test_steps = len(test_dataloader.dataset) // BATCH_SIZE
+    train_data_count = 25249
+    test_image_count = 6283
 
     # for i in range(10):
     #     image_tensor, label = next(iter(train_dataloader))
@@ -57,6 +57,7 @@ def main():
         num_correct_train_predictions = 0
         num_correct_test_predictions = 0
 
+        train_steps = 0
         for x, y in next(iter(train_dataloader)):
             y = one_hot(torch.Tensor(map(lambda label: train_dataset.label_map[label], y)), num_classes=43)
             # (x, y) = (x.to(device), y.to(device)
@@ -73,9 +74,12 @@ def main():
             total_train_loss += loss
             num_correct_train_predictions += (pred.argmax(1) == y).type(torch.float).sum().item()
 
+            train_steps += 1
+
+        batch_size_entries = y.shape[0]
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
-        avg_train_acc = num_correct_train_predictions / len(train_dataloader.dataset)
+        avg_train_acc = num_correct_train_predictions / batch_size_entries
 
         # update our training history
         H["train_loss"].append(avg_train_loss)
@@ -97,7 +101,7 @@ def main():
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
             num_correct_test_predictions += (pred.argmax(1) == y).type(torch.float).sum().item()
-        test_accuracy = num_correct_test_predictions / len(test_dataloader.dataset)
+        test_accuracy = num_correct_test_predictions / test_image_count
         print("Test loss: {:.6f}, Test accuracy: {:.4f}".format(total_test_loss, test_accuracy))
 
 if __name__ == '__main__':
