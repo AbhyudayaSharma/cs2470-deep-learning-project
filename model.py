@@ -63,7 +63,7 @@ class SimpleConvModel(Module):
         return output
 
     def loss(self, logits, labels):
-        return self._loss(logits, labels)
+        return self._loss(logits, labels.to(torch.float16))
 
     def accuracy(self, logits, labels):
         correct = (logits == labels).float().sum()
