@@ -52,7 +52,7 @@ def main():
         train_steps = 0
         for x, y in iter(train_dataloader):
             y = one_hot(
-                torch.Tensor(map(lambda label: train_dataset.label_map[label], y)),
+                torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))),
                 num_classes=43,
             )
             # (x, y) = (x.to(device), y.to(device)
@@ -94,7 +94,7 @@ def main():
         model.eval()
         for x, y in iter(test_dataloader):
             y = one_hot(
-                torch.Tensor(map(lambda label: test_dataset.label_map[label], y)),
+                torch.Tensor(list(map(lambda label: test_dataset.label_map[label], y))),
                 num_classes=43,
             )
 
