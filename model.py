@@ -1,5 +1,6 @@
 # import the necessary packages
 import torch
+torch.cuda.empty_cache()
 from torch.nn import Module
 from torch.nn import Conv2d
 from torch.nn import Linear

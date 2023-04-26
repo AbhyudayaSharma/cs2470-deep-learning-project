@@ -2,6 +2,7 @@ import os
 import random
 
 import torch
+torch.cuda.empty_cache()
 import torchvision
 
 from torch.utils.data import DataLoader

@@ -1,4 +1,5 @@
 import torch
+torch.cuda.empty_cache()
 from torch.utils.data import DataLoader
 
 from preprocess import ImageDataset
