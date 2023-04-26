@@ -93,6 +93,8 @@ def main():
         # set the model in evaluation mode
         model.eval()
         for x, y in iter(test_dataloader):
+            print(x, y)
+            print(torch.Tensor(list(map(lambda label: test_dataset.label_map[label], y))))
             y = one_hot(
                 torch.Tensor(list(map(lambda label: test_dataset.label_map[label], y))),
                 num_classes=43,
