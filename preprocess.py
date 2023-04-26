@@ -7,8 +7,8 @@ import torchvision
 from torch.utils.data import DataLoader
 from torchvision.io.image import ImageReadMode
 
-class ImageDataset(torch.utils.data.IterableDataset):
 
+class ImageDataset(torch.utils.data.IterableDataset):
     def __init__(self, directory_path) -> None:
         super(ImageDataset).__init__()
 
@@ -24,10 +24,12 @@ class ImageDataset(torch.utils.data.IterableDataset):
         for path in self.image_paths:
             # extract label from image name
             label = path.split(".")[0]
-            label = label[: label.rindex('_')]
+            label = label[: label.rindex("_")]
             countries.append(label)
             # return image as tensor and label
-            yield torchvision.io.read_image(os.path.join(self.directory_path, path), mode=ImageReadMode.RGB), label
+            yield torchvision.io.read_image(
+                os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
+            ), label
 
         self.country_labels = list(sorted(set(countries)))
         self.label_map = {val: i for i, val in enumerate(self.country_labels)}
