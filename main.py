@@ -45,9 +45,7 @@ def main():
     # loop over our epochs
     for e in range(0, EPOCHS):
         model.train()
-
         total_train_loss = 0
-        total_test_loss = 0
 
         num_correct_train_predictions = 0
         num_correct_test_predictions = 0
@@ -75,10 +73,9 @@ def main():
 
             train_steps += 1
 
-        batch_size_entries = y.shape[0]
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
-        avg_train_acc = num_correct_train_predictions / batch_size_entries
+        avg_train_acc = num_correct_train_predictions / train_data_count
 
         # update our training history
         H["train_loss"].append(avg_train_loss)
@@ -91,6 +88,7 @@ def main():
             )
         )
 
+    total_test_loss = 0
     with torch.no_grad():
         # set the model in evaluation mode
         model.eval()
