@@ -7,9 +7,10 @@ from torch.nn import Linear
 from torch.nn import MaxPool2d
 from torch.nn import LeakyReLU
 from torch.nn import LogSoftmax
+from torch.nn import Softmax
 from torch import flatten
 from torch.nn import NLLLoss
-
+from torch.nn import CrossEntropyLoss
 
 class SimpleConvModel(Module):
     def __init__(self, numChannels, classes):
@@ -27,7 +28,7 @@ class SimpleConvModel(Module):
         self.relu_3 = LeakyReLU()
 
         self.fc_2 = Linear(in_features=500, out_features=classes, dtype=torch.float16)
-        self.log_softmax = LogSoftmax(dim=1)
+        self.softmax = Softmax(dim=1)
 
         self._loss = NLLLoss()
 
