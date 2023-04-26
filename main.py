@@ -9,7 +9,7 @@ from torch.nn.functional import one_hot
 
 
 def main():
-    device = "cuda"
+    device = torch.device('cuda')
     x = torch.rand(5, 3)
     print(x)
 
