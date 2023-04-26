@@ -14,18 +14,18 @@ class SimpleConvModel(Module):
     def __init__(self, numChannels, classes):
         super(SimpleConvModel, self).__init__()
 
-        self.conv_1 = Conv2d(in_channels=numChannels, out_channels=20, kernel_size=(5, 5))
+        self.conv_1 = Conv2d(in_channels=numChannels, out_channels=20, kernel_size=(5, 5), dtype=torch.float16)
         self.relu_1 = LeakyReLU()
         self.max_pool_1 = MaxPool2d(kernel_size=(2, 2), stride=(2, 2))
 
-        self.conv_2 = Conv2d(in_channels=20, out_channels=50, kernel_size=(5, 5))
+        self.conv_2 = Conv2d(in_channels=20, out_channels=50, kernel_size=(5, 5), dtype=torch.float16)
         self.relu_2 = LeakyReLU()
         self.max_pool_2 = MaxPool2d(kernel_size=(2, 2), stride=(2, 2))
 
-        self.fc_1 = Linear(in_features=800, out_features=500)
+        self.fc_1 = Linear(in_features=800, out_features=500, dtype=torch.float16)
         self.relu_3 = LeakyReLU()
 
-        self.fc_2 = Linear(in_features=500, out_features=classes)
+        self.fc_2 = Linear(in_features=500, out_features=classes, dtype=torch.float16)
         self.log_softmax = LogSoftmax(dim=1)
 
         self._loss = NLLLoss()
