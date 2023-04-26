@@ -44,10 +44,10 @@ class SimpleConvModel(Module):
         x = self.max_pool_2(x)
 
         x = flatten(x, 1)
-        x = self.fc1(x)
-        x = self.relu3(x)
+        x = self.fc_1(x)
+        x = self.relu_3(x)
 
-        x = self.fc2(x)
+        x = self.fc_2(x)
         output = self.log_softmax(x)
         return output
 
