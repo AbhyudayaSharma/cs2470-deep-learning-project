@@ -51,8 +51,8 @@ def main():
 
         train_steps = 0
         for x, y in iter(train_dataloader):
-            # print(x, y)
-            # print(torch.IntTensor(list(map(lambda label: train_dataset.label_map[label], y))))
+            print(x, y)
+            print(torch.IntTensor(list(map(lambda label: train_dataset.label_map[label], y))))
 
             y = one_hot(
                 torch.IntTensor(list(map(lambda label: train_dataset.label_map[label], y))),
