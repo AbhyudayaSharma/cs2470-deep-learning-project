@@ -14,22 +14,26 @@ class ImageDataset(torch.utils.data.IterableDataset):
 
         self.directory_path = directory_path
         self.image_paths = list(map(lambda x: x.name, os.scandir(path=directory_path)))
-        self.country_labels = []
 
-    def __iter__(self) -> None:
-        # shuffle the image paths
-        random.shuffle(self.image_paths)
         countries = []
-        # get name of next image
         for path in self.image_paths:
             # extract label from image name
             label = path.split(".")[0]
             label = label[: label.rindex("_")]
             countries.append(label)
+
+        self.country_labels = list(sorted(set(countries)))
+        self.label_map = {val: i for i, val in enumerate(self.country_labels)}
+
+    def __iter__(self) -> None:
+        # shuffle the image paths
+        random.shuffle(self.image_paths)
+        # get name of next image
+        for path in self.image_paths:
+            # extract label from image name
+            label = path.split(".")[0]
+            label = label[: label.rindex("_")]
             # return image as tensor and label
             yield torchvision.io.read_image(
                 os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
             ), label
-
-        self.country_labels = list(sorted(set(countries)))
-        self.label_map = {val: i for i, val in enumerate(self.country_labels)}
