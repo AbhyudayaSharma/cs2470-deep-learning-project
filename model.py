@@ -15,11 +15,11 @@ class SimpleConvModel(Module):
     def __init__(self, numChannels, classes):
         super(SimpleConvModel, self).__init__()
 
-        self.conv_1 = Conv2d(in_channels=numChannels, out_channels=20, kernel_size=(5, 5), dtype=torch.float16)
+        self.conv_1 = Conv2d(in_channels=numChannels, out_channels=20, kernel_size=(5, 5), padding='same', dtype=torch.float16)
         self.relu_1 = LeakyReLU()
         self.max_pool_1 = MaxPool2d(kernel_size=(2, 2), stride=(2, 2))
 
-        self.conv_2 = Conv2d(in_channels=20, out_channels=50, kernel_size=(5, 5), dtype=torch.float16)
+        self.conv_2 = Conv2d(in_channels=20, out_channels=50, kernel_size=(5, 5), padding='same', dtype=torch.float16)
         self.relu_2 = LeakyReLU()
         self.max_pool_2 = MaxPool2d(kernel_size=(2, 2), stride=(2, 2))
 
@@ -40,10 +40,10 @@ class SimpleConvModel(Module):
         x = self.max_pool_1(x)
 
         x = self.conv_2(x)
-        sx = self.relu_2(x)
+        x = self.relu_2(x)
         x = self.max_pool_2(x)
 
-        x = flatten(x, 1)
+        x = flatten(x)
         x = self.fc_1(x)
         x = self.relu_3(x)
 
