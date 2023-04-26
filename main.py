@@ -72,7 +72,7 @@ def main():
 
             total_train_loss += loss
             num_correct_train_predictions += (
-                (pred.argmax(1) == y).type(torch.float).sum().item()
+                (pred.argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             )
 
             train_steps += 1
@@ -108,7 +108,7 @@ def main():
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
             num_correct_test_predictions += (
-                (pred.argmax(1) == y).type(torch.float).sum().item()
+                (pred.argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             )
         test_accuracy = num_correct_test_predictions / test_image_count
         print(
