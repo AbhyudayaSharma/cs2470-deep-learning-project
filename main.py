@@ -4,8 +4,6 @@ from torch.utils.data import DataLoader
 from preprocess import ImageDataset
 from model import SimpleConvModel
 
-from sklearn.metrics import classification_report
-from torchvision.transforms import ToTensor
 from torch.optim import Adam
 from torch.nn.functional import one_hot
 
