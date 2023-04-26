@@ -1,4 +1,5 @@
 # import the necessary packages
+import torch
 from torch.nn import Module
 from torch.nn import Conv2d
 from torch.nn import Linear
@@ -31,7 +32,7 @@ class SimpleConvModel(Module):
 
     def forward(self, x):
         # convert to float16
-        x = x.half()
+        x = x.to(torch.float16)
 
         x = self.conv_1(x)
         x = self.relu_1(x)
