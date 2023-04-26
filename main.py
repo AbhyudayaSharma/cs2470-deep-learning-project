@@ -50,7 +50,7 @@ def main():
         num_correct_test_predictions = 0
 
         train_steps = 0
-        for x, y in next(iter(train_dataloader)):
+        for x, y in iter(train_dataloader):
             y = one_hot(
                 torch.Tensor(map(lambda label: train_dataset.label_map[label], y)),
                 num_classes=43,
@@ -92,7 +92,7 @@ def main():
     with torch.no_grad():
         # set the model in evaluation mode
         model.eval()
-        for x, y in next(iter(test_dataloader)):
+        for x, y in iter(test_dataloader):
             y = one_hot(
                 torch.Tensor(map(lambda label: test_dataset.label_map[label], y)),
                 num_classes=43,
