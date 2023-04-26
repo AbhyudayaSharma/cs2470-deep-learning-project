@@ -9,6 +9,7 @@ from torch.nn.functional import one_hot
 
 
 def main():
+    device = "cuda"
     x = torch.rand(5, 3)
     print(x)
 
@@ -55,7 +56,7 @@ def main():
                 torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64),
                 num_classes=43,
             )
-            # (x, y) = (x.to(device), y.to(device)
+            x, y = x.to(device), y.to(device)
 
             # zero out the gradients, perform the backpropagation step,and update the weights
             opt.zero_grad()
@@ -99,7 +100,7 @@ def main():
             )
 
             # send the input to the device
-            # (x, y) = (x.to(device), y.to(device))
+            x, y = x.to(device), y.to(device)
 
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
