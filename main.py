@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import DataLoader
-import math
+
 from preprocess import ImageDataset
 from model import SimpleConvModel
 
@@ -8,6 +8,7 @@ from sklearn.metrics import classification_report
 from torchvision.transforms import ToTensor
 from torch.optim import Adam
 from torch.nn.functional import one_hot
+
 
 def main():
     x = torch.rand(5, 3)
@@ -32,23 +33,16 @@ def main():
     #     image_tensor, label = next(iter(test_dataloader))
     #     print(image_tensor, label)
 
-    model = SimpleConvModel(
-        numChannels=3,
-        classes=43
-    )
+    model = SimpleConvModel(numChannels=3, classes=43)
     # initialize our optimizer and loss function
     opt = Adam(model.parameters(), lr=1e-3)
     loss_fn = model.loss
 
     # initialize a dictionary to store training history
-    H = {
-        "train_loss": [],
-        "train_acc": []
-    }
+    H = {"train_loss": [], "train_acc": []}
 
     # loop over our epochs
     for e in range(0, EPOCHS):
-
         model.train()
 
         total_train_loss = 0
@@ -59,7 +53,10 @@ def main():
 
         train_steps = 0
         for x, y in next(iter(train_dataloader)):
-            y = one_hot(torch.Tensor(map(lambda label: train_dataset.label_map[label], y)), num_classes=43)
+            y = one_hot(
+                torch.Tensor(map(lambda label: train_dataset.label_map[label], y)),
+                num_classes=43,
+            )
             # (x, y) = (x.to(device), y.to(device)
 
             # zero out the gradients, perform the backpropagation step,and update the weights
@@ -72,7 +69,9 @@ def main():
             opt.step()
 
             total_train_loss += loss
-            num_correct_train_predictions += (pred.argmax(1) == y).type(torch.float).sum().item()
+            num_correct_train_predictions += (
+                (pred.argmax(1) == y).type(torch.float).sum().item()
+            )
 
             train_steps += 1
 
@@ -86,23 +85,36 @@ def main():
         H["train_acc"].append(avg_train_acc)
         # print the model training and validation information
         print("[INFO] EPOCH: {}/{}".format(e + 1, EPOCHS))
-        print("Train loss: {:.6f}, Train accuracy: {:.4f}".format(avg_train_loss, avg_train_acc))
+        print(
+            "Train loss: {:.6f}, Train accuracy: {:.4f}".format(
+                avg_train_loss, avg_train_acc
+            )
+        )
 
     with torch.no_grad():
         # set the model in evaluation mode
         model.eval()
         for x, y in next(iter(test_dataloader)):
-
-            y = one_hot(torch.Tensor(map(lambda label: test_dataset.label_map[label], y)), num_classes=43)
+            y = one_hot(
+                torch.Tensor(map(lambda label: test_dataset.label_map[label], y)),
+                num_classes=43,
+            )
 
             # send the input to the device
-            #(x, y) = (x.to(device), y.to(device))
+            # (x, y) = (x.to(device), y.to(device))
 
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
-            num_correct_test_predictions += (pred.argmax(1) == y).type(torch.float).sum().item()
+            num_correct_test_predictions += (
+                (pred.argmax(1) == y).type(torch.float).sum().item()
+            )
         test_accuracy = num_correct_test_predictions / test_image_count
-        print("Test loss: {:.6f}, Test accuracy: {:.4f}".format(total_test_loss, test_accuracy))
+        print(
+            "Test loss: {:.6f}, Test accuracy: {:.4f}".format(
+                total_test_loss, test_accuracy
+            )
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
