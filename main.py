@@ -51,11 +51,8 @@ def main():
 
         train_steps = 0
         for x, y in iter(train_dataloader):
-            print(x, y)
-            print(torch.IntTensor(list(map(lambda label: train_dataset.label_map[label], y))))
-
             y = one_hot(
-                torch.IntTensor(list(map(lambda label: train_dataset.label_map[label], y))),
+                torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64),
                 num_classes=43,
             )
             # (x, y) = (x.to(device), y.to(device)
@@ -97,7 +94,7 @@ def main():
         model.eval()
         for x, y in iter(test_dataloader):
             y = one_hot(
-                torch.IntTensor(list(map(lambda label: test_dataset.label_map[label], y))),
+                torch.Tensor(list(map(lambda label: test_dataset.label_map[label], y))).to(torch.int64),
                 num_classes=43,
             )
 
