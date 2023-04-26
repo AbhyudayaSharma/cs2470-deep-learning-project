@@ -58,7 +58,7 @@ class SimpleConvModel(Module):
         x = self.fc_2(x)
         # print(x.shape)
 
-        output = self.log_softmax(x)
+        output = self.softmax(x)
         # print(output.shape)
         return output
 
