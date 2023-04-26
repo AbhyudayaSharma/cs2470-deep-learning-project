@@ -60,6 +60,8 @@ def main():
             )
             x, y = x.to(device), y.to(device)
 
+            print(x[0].shape)
+
             # zero out the gradients, perform the backpropagation step,and update the weights
             opt.zero_grad()
 
