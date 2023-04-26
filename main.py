@@ -61,7 +61,7 @@ def main():
             # zero out the gradients, perform the backpropagation step,and update the weights
             opt.zero_grad()
 
-            pred = model(x)
+            pred = model(x).to(device)
             loss = loss_fn(pred, y)
 
             loss.backward()
@@ -102,7 +102,7 @@ def main():
             # send the input to the device
             x, y = x.to(device), y.to(device)
 
-            pred = model(x)
+            pred = model(x).to(device)
             total_test_loss += loss_fn(pred, y)
             num_correct_test_predictions += (
                 (pred.argmax(1) == y).type(torch.float).sum().item()
