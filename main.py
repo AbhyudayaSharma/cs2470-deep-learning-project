@@ -14,6 +14,7 @@ def main():
     print(x)
 
     BATCH_SIZE = 256
+    EPOCHS = 1
     train_dataset = ImageDataset(directory_path='/var/project/train_data')
     test_dataset = ImageDataset(directory_path='/var/project/test_data')
 
@@ -46,7 +47,7 @@ def main():
     }
 
     # loop over our epochs
-    for e in range(0, 1):
+    for e in range(0, EPOCHS):
 
         model.train()
 
@@ -54,7 +55,7 @@ def main():
         total_test_loss = 0
 
         num_correct_train_predictions = 0
-        num_correct_validation_predictions = 0
+        num_correct_test_predictions = 0
 
         for x, y in next(iter(train_dataloader)):
             y = one_hot(torch.Tensor(map(lambda label: train_dataset.label_map[label], y)), num_classes=43)
@@ -81,8 +82,7 @@ def main():
         H["train_acc"].append(avg_train_acc)
         # print the model training and validation information
         print("[INFO] EPOCH: {}/{}".format(e + 1, EPOCHS))
-        print("Train loss: {:.6f}, Train accuracy: {:.4f}".format(
-            avg_train_loss, avg_train_acc))
+        print("Train loss: {:.6f}, Train accuracy: {:.4f}".format(avg_train_loss, avg_train_acc))
 
     with torch.no_grad():
         # set the model in evaluation mode
@@ -96,7 +96,9 @@ def main():
 
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
-            num_correct_validation_predictions += (pred.argmax(1) == y).type(torch.float).sum().item()
+            num_correct_test_predictions += (pred.argmax(1) == y).type(torch.float).sum().item()
+        test_accuracy = num_correct_test_predictions / len(test_dataloader.dataset)
+        print("Test loss: {:.6f}, Test accuracy: {:.4f}".format(total_test_loss, test_accuracy))
 
 if __name__ == '__main__':
     main()
