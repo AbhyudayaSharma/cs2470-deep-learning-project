@@ -35,6 +35,10 @@ class ImageDataset(torch.utils.data.IterableDataset):
             label = path.split(".")[0]
             label = label[: label.rindex("_")]
             # return image as tensor and label
-            yield torchvision.io.read_image(
-                os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
-            ), label
+            try :
+                yield torchvision.io.read_image(
+                    os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
+                ), label
+            except RuntimeError as e:
+                print(path)
+                raise e
