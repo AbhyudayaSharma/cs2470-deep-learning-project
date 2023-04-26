@@ -30,7 +30,7 @@ class SimpleConvModel(Module):
         self.fc_2 = Linear(in_features=500, out_features=classes, dtype=torch.float16)
         self.softmax = Softmax(dim=1)
 
-        self._loss = NLLLoss()
+        self._loss = CrossEntropyLoss()
 
     def forward(self, x):
         # convert to float16
