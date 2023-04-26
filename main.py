@@ -59,13 +59,12 @@ def main():
                 num_classes=43,
             )
             x, y = x.to(device), y.to(device)
-
-            print(x[0].shape)
-
             # zero out the gradients, perform the backpropagation step,and update the weights
             opt.zero_grad()
 
             pred = model(x)
+            print(pred.shape)
+            print(y.shape)
             loss = loss_fn(pred, y)
 
             loss.backward()
