@@ -63,8 +63,6 @@ def main():
             opt.zero_grad()
 
             pred = model(x)
-            print(pred.shape)
-            print(y.shape)
             loss = loss_fn(pred, y)
 
             loss.backward()
