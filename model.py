@@ -43,7 +43,7 @@ class SimpleConvModel(Module):
         x = self.relu_2(x)
         x = self.max_pool_2(x)
 
-        x = flatten(x)
+        x = flatten(x, 1)
         x = self.fc_1(x)
         x = self.relu_3(x)
 
