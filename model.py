@@ -34,21 +34,31 @@ class SimpleConvModel(Module):
     def forward(self, x):
         # convert to float16
         x = x.to(torch.float16)
-
+        print(x.shape)
         x = self.conv_1(x)
+        print(x.shape)
         x = self.relu_1(x)
         x = self.max_pool_1(x)
+        print(x.shape)
 
         x = self.conv_2(x)
+        print(x.shape)
         x = self.relu_2(x)
         x = self.max_pool_2(x)
+        print(x.shape)
 
         x = flatten(x, 1)
+        print(x.shape)
+
         x = self.fc_1(x)
         x = self.relu_3(x)
+        print(x.shape)
 
         x = self.fc_2(x)
+        print(x.shape)
+
         output = self.log_softmax(x)
+        print(output.shape)
         return output
 
     def loss(self, logits, labels):
