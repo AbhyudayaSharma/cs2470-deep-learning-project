@@ -36,7 +36,7 @@ def main():
     #     print(image_tensor, label)
 
     # model = SimpleConvModel(numChannels=3, classes=43)
-    model = torchvision.models.resnet50()
+    model = torchvision.models.resnet50(num_classes=43)
     model = model.to(device)
 
     # initialize our optimizer and loss function
