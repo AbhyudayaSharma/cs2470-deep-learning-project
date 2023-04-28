@@ -16,7 +16,7 @@ def main():
     x = torch.rand(5, 3)
     print(x)
 
-    BATCH_SIZE = 10
+    BATCH_SIZE = 5
     EPOCHS = 1
     train_dataset = ImageDataset(directory_path='/var/project/train_data')
     test_dataset = ImageDataset(directory_path='/var/project/test_data')
