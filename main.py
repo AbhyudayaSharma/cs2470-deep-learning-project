@@ -61,6 +61,7 @@ def main():
                 num_classes=43,
             )
             x = x / 255.0
+            y = y.to(torch.float16)
             x, y = x.to(device), y.to(device)
             # zero out the gradients, perform the backpropagation step,and update the weights
             opt.zero_grad()
