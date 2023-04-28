@@ -1,6 +1,7 @@
 import torch
 torch.cuda.empty_cache()
 from torch.utils.data import DataLoader
+import gc
 
 from preprocess import ImageDataset
 from model import SimpleConvModel
@@ -72,6 +73,7 @@ def main():
             )
 
             train_steps += 1
+            gc.collect()
 
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
