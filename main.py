@@ -36,12 +36,12 @@ def main():
     #     print(image_tensor, label)
 
     # model = SimpleConvModel(numChannels=3, classes=43)
-    model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', pretrained=False)
+    model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights=None)
     model = model.to(device)
 
     # initialize our optimizer and loss function
     opt = Adam(model.parameters(), lr=1e-3)
-    loss_fn = model.loss
+    loss_fn = torch.nn.CrossEntropyLoss()
 
     # initialize a dictionary to store training history
     H = {"train_loss": [], "train_acc": []}
