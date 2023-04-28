@@ -1,4 +1,5 @@
 import torch
+import torchvision
 torch.cuda.empty_cache()
 from torch.utils.data import DataLoader
 import gc
@@ -34,8 +35,10 @@ def main():
     #     image_tensor, label = next(iter(test_dataloader))
     #     print(image_tensor, label)
 
-    model = SimpleConvModel(numChannels=3, classes=43)
+    # model = SimpleConvModel(numChannels=3, classes=43)
+    model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', pretrained=False)
     model = model.to(device)
+
     # initialize our optimizer and loss function
     opt = Adam(model.parameters(), lr=1e-3)
     loss_fn = model.loss
