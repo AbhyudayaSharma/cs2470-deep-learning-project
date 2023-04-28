@@ -60,6 +60,7 @@ def main():
                 torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64),
                 num_classes=43,
             )
+            x = x / 255.0
             x, y = x.to(device), y.to(device)
             # zero out the gradients, perform the backpropagation step,and update the weights
             opt.zero_grad()
