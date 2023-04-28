@@ -36,7 +36,7 @@ def main():
     #     print(image_tensor, label)
 
     # model = SimpleConvModel(numChannels=3, classes=43)
-    model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', weights=None)
+    model = torchvision.models.resnet50()
     model = model.to(device)
 
     # initialize our optimizer and loss function
@@ -66,6 +66,7 @@ def main():
             opt.zero_grad()
 
             pred = model(x)
+            print(pred.shape, y.shape)
             loss = loss_fn(pred, y)
 
             loss.backward()
