@@ -1,8 +1,13 @@
+import datetime
+
 import torch
 import torchvision
+
 torch.cuda.empty_cache()
+from datetime import datetime
 from torch.utils.data import DataLoader
 import gc
+import os
 
 from preprocess import ImageDataset
 
@@ -19,6 +24,19 @@ def correct_predictions(truth, predictions, top_k=3):
             count += 1
 
     return count
+
+
+def save_model(model):
+    save_path = '/var/project/models'
+    # model_uuid = uuid.uuid4()
+    file_path = os.path.join(save_path, f'model_{datetime.now().isoformat()}_.pickle')
+    with open(file_path, 'rwb') as f:
+        torch.save(model, file_path)
+
+
+def load_model(path):
+    return torch.load(path)
+
 
 def main():
     device = torch.device('cuda')
@@ -96,6 +114,8 @@ def main():
             )
         )
 
+    save_model(model)
+
     total_test_loss = 0
     num_correct_test_predictions_top1 = 0
     num_correct_test_predictions_top2 = 0
@@ -131,7 +151,7 @@ def main():
 
         print(
             "Test loss: {:.6f}, Test accuracy 1: {:.4f}, Test accuracy 2: {:.4f}, Test accuracy 3: {:.4f}, Test accuracy 5: {:.4f}".format(
-                total_test_loss, test_accuracy1, test_accuracy2 ,test_accuracy3, test_accuracy5
+                total_test_loss, test_accuracy1, test_accuracy2, test_accuracy3, test_accuracy5
             )
         )
 
