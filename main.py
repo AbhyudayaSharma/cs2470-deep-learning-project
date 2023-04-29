@@ -29,7 +29,7 @@ def correct_predictions(truth, predictions, top_k=3):
 def save_model(model):
     save_path = '/var/project/models'
     # model_uuid = uuid.uuid4()
-    file_path = os.path.join(save_path, f'model_{datetime.now().isoformat()}_.pickle')
+    file_path = os.path.join(save_path, f'model_{datetime.now().isoformat()}.pickle')
     with open(file_path, 'wb') as f:
         torch.save(model, file_path)
 
