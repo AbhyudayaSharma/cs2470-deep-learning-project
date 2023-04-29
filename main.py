@@ -14,7 +14,7 @@ from torch.nn.functional import one_hot
 def correct_predictions(truth, predictions, top_k=3):
     count = 0
 
-    _, top5_catid = torch.topk(predictions, top_k, dim=1)
+    _, top5_catid = torch.topk(predictions, top_k)
     print("shape", truth.shape, top5_catid.shape, predictions.shape)
     for i in range(truth.shape[0]):
         if truth[i] in top5_catid[i]:
