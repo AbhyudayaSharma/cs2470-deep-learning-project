@@ -64,11 +64,8 @@ def main():
 
         train_steps = 0
         for x, y in iter(train_dataloader):
-            y_original = y
-            y = one_hot(
-                torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64),
-                num_classes=43,
-            )
+            classes = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
+            y = one_hot(classes, num_classes=43)
             x = x / 255.0
             y = y.to(torch.float16)
             x, y = x.to(device), y.to(device)
@@ -88,7 +85,7 @@ def main():
             # num_correct_train_predictions += (
             #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             # )
-            num_correct_train_predictions += correct_predictions(y_original, torch.nn.functional.softmax(pred))
+            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred))
 
             train_steps += 1
             gc.collect()
@@ -116,11 +113,8 @@ def main():
         # set the model in evaluation mode
         model.eval()
         for x, y in iter(test_dataloader):
-            y_original = y
-            y = one_hot(
-                torch.Tensor(list(map(lambda label: test_dataset.label_map[label], y))).to(torch.int64),
-                num_classes=43,
-            )
+            classes = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
+            y = one_hot(classes, num_classes=43)
 
             x = x / 255.0
             y = y.to(torch.float16)
@@ -130,7 +124,7 @@ def main():
 
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
-            num_correct_test_predictions += correct_predictions(y_original, torch.nn.functional.softmax(pred))
+            num_correct_test_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred))
             # num_correct_test_predictions += (
             #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             # )
