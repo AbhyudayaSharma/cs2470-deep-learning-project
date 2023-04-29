@@ -126,7 +126,7 @@ def main():
 
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
-            num_correct_test_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred[0], dim=0))
+            num_correct_test_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1))
             # num_correct_test_predictions += (
             #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             # )
