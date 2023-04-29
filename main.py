@@ -122,7 +122,7 @@ def main():
 
             gc.collect()
 
-    test_accuracy = num_correct_test_predictions / test_image_count
+        test_accuracy = num_correct_test_predictions / test_image_count
         print(
             "Test loss: {:.6f}, Test accuracy: {:.4f}".format(
                 total_test_loss, test_accuracy
