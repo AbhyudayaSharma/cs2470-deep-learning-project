@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader
 import gc
 
 from preprocess import ImageDataset
-# from model import SimpleConvModel
 
 from torch.optim import Adam
 from torch.nn.functional import one_hot
@@ -24,8 +23,6 @@ def correct_predictions(truth, predictions, top_k=3):
 
 def main():
     device = torch.device('cuda')
-    x = torch.rand(5, 3)
-    print(x)
 
     BATCH_SIZE = 5
     EPOCHS = 4
@@ -38,17 +35,9 @@ def main():
     train_data_count = 25249
     test_image_count = 6283
 
-    # for i in range(10):
-    #     image_tensor, label = next(iter(train_dataloader))
-    #     print(image_tensor, label)
-    #
-    # for i in range(10):
-    #     image_tensor, label = next(iter(test_dataloader))
-    #     print(image_tensor, label)
-
-    # model = SimpleConvModel(numChannels=3, classes=43)
     model = torchvision.models.resnet50(num_classes=43)
     model = model.to(device)
+    print(model)
 
     # initialize our optimizer and loss function
     opt = Adam(model.parameters(), lr=1e-3)
