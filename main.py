@@ -30,7 +30,7 @@ def save_model(model):
     save_path = '/var/project/models'
     # model_uuid = uuid.uuid4()
     file_path = os.path.join(save_path, f'model_{datetime.now().isoformat()}_.pickle')
-    with open(file_path, 'rwb') as f:
+    with open(file_path, 'wb') as f:
         torch.save(model, file_path)
 
 
