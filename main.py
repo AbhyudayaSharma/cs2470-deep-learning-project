@@ -52,7 +52,7 @@ def main():
     train_data_count = 25249
     test_image_count = 6283
 
-    model = torchvision.models.resnet50(num_classes=43)
+    model = torchvision.models.resnet152(num_classes=43)
     model = model.to(device)
     print(model)
 
