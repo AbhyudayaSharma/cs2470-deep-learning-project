@@ -17,7 +17,7 @@ def main():
     print(x)
 
     BATCH_SIZE = 5
-    EPOCHS = 1
+    EPOCHS = 4
     train_dataset = ImageDataset(directory_path='/var/project/train_data')
     test_dataset = ImageDataset(directory_path='/var/project/test_data')
 
@@ -67,7 +67,7 @@ def main():
             opt.zero_grad()
 
             pred = model(x)
-            print(pred.shape, y.shape)
+            print(f'{e} {train_steps}')
             loss = loss_fn(pred, y)
 
             loss.backward()
