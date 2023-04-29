@@ -23,7 +23,7 @@ def correct_predictions(truth, predictions, top_k=3):
 def main():
     device = torch.device('cuda')
 
-    BATCH_SIZE = 8
+    BATCH_SIZE = 7
     EPOCHS = 4
     train_dataset = ImageDataset(directory_path='/var/project/train_data')
     test_dataset = ImageDataset(directory_path='/var/project/test_data')
