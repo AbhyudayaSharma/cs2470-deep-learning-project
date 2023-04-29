@@ -52,7 +52,7 @@ def main():
     train_data_count = 25249
     test_image_count = 6283
 
-    model = torchvision.models.DenseNet(num_classes=43)
+    model = torchvision.models.Inception3(num_classes=43)
     model = model.to(device)
     print(model)
 
@@ -88,11 +88,6 @@ def main():
             opt.step()
 
             total_train_loss += loss
-
-            # accuracy(y_original, pred)
-            # num_correct_train_predictions += (
-            #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
-            # )
             num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1))
 
             train_steps += 1
