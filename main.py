@@ -84,7 +84,7 @@ def main():
 
             total_train_loss += loss
 
-            accuracy(y_original, pred)
+            # accuracy(y_original, pred)
             # num_correct_train_predictions += (
             #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             # )
