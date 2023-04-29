@@ -80,7 +80,7 @@ def main():
             # zero out the gradients, perform the backpropagation step,and update the weights
             opt.zero_grad()
 
-            pred = model(x)
+            pred = model(x)[0]
             print(f'{e} {train_steps}')
             loss = loss_fn(pred, y)
 
@@ -130,7 +130,7 @@ def main():
             # send the input to the device
             x, y = x.to(device), y.to(device)
 
-            pred = model(x)
+            pred = model(x)[0]
             total_test_loss += loss_fn(pred, y)
             num_correct_test_predictions_top1 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 1)
             num_correct_test_predictions_top2 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 2)
