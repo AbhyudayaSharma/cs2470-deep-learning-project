@@ -121,6 +121,7 @@ def main():
             )
 
             gc.collect()
+            break
 
         test_accuracy = num_correct_test_predictions / test_image_count
         print(
