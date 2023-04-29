@@ -85,7 +85,7 @@ def main():
             # num_correct_train_predictions += (
             #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             # )
-            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred))
+            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred[0], dim=0))
 
             train_steps += 1
             gc.collect()
@@ -124,7 +124,7 @@ def main():
 
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
-            num_correct_test_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred))
+            num_correct_test_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred[0], dim=0))
             # num_correct_test_predictions += (
             #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             # )
