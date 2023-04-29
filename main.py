@@ -87,7 +87,7 @@ def main():
             # num_correct_train_predictions += (
             #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             # )
-            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred[0], dim=0))
+            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1))
 
             train_steps += 1
             gc.collect()
