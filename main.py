@@ -52,7 +52,6 @@ def main():
         total_train_loss = 0
 
         num_correct_train_predictions = 0
-        num_correct_test_predictions = 0
 
         train_steps = 0
         for x, y in iter(train_dataloader):
@@ -80,6 +79,7 @@ def main():
 
             train_steps += 1
             gc.collect()
+            break
 
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
@@ -97,6 +97,8 @@ def main():
         )
 
     total_test_loss = 0
+    num_correct_test_predictions = 0
+
     with torch.no_grad():
         # set the model in evaluation mode
         model.eval()
@@ -106,6 +108,9 @@ def main():
                 num_classes=43,
             )
 
+            x = x / 255.0
+            y = y.to(torch.float16)
+
             # send the input to the device
             x, y = x.to(device), y.to(device)
 
@@ -114,7 +119,10 @@ def main():
             num_correct_test_predictions += (
                 (pred.argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
             )
-        test_accuracy = num_correct_test_predictions / test_image_count
+
+            gc.collect()
+
+    test_accuracy = num_correct_test_predictions / test_image_count
         print(
             "Test loss: {:.6f}, Test accuracy: {:.4f}".format(
                 total_test_loss, test_accuracy
