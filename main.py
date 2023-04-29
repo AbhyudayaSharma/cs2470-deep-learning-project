@@ -41,8 +41,8 @@ def load_model(path):
 def main():
     device = torch.device('cuda')
 
-    BATCH_SIZE = 7
-    EPOCHS = 4
+    BATCH_SIZE = 2
+    EPOCHS = 1
     train_dataset = ImageDataset(directory_path='/var/project/train_data')
     test_dataset = ImageDataset(directory_path='/var/project/test_data')
 
@@ -97,7 +97,7 @@ def main():
 
             train_steps += 1
             gc.collect()
-            break
+            # break
 
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
@@ -142,7 +142,7 @@ def main():
             num_correct_test_predictions_top3 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 3)
             num_correct_test_predictions_top5 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 5)
             gc.collect()
-            break
+            # break
 
         test_accuracy1 = num_correct_test_predictions_top1 / test_image_count
         test_accuracy2 = num_correct_test_predictions_top2 / test_image_count
