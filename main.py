@@ -109,7 +109,10 @@ def main():
         )
 
     total_test_loss = 0
-    num_correct_test_predictions = 0
+    num_correct_test_predictions_top1 = 0
+    num_correct_test_predictions_top2 = 0
+    num_correct_test_predictions_top3 = 0
+    num_correct_test_predictions_top5 = 0
 
     with torch.no_grad():
         # set the model in evaluation mode
@@ -126,18 +129,21 @@ def main():
 
             pred = model(x)
             total_test_loss += loss_fn(pred, y)
-            num_correct_test_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1))
-            # num_correct_test_predictions += (
-            #     (torch.nn.functional.softmax(pred[0], dim=0).argmax(1) == y.argmax(1)).type(torch.float16).sum().item()
-            # )
-
+            num_correct_test_predictions_top1 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 1)
+            num_correct_test_predictions_top2 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 2)
+            num_correct_test_predictions_top3 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 3)
+            num_correct_test_predictions_top5 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 5)
             gc.collect()
             break
 
-        test_accuracy = num_correct_test_predictions / test_image_count
+        test_accuracy1 = num_correct_test_predictions_top1 / test_image_count
+        test_accuracy2 = num_correct_test_predictions_top2 / test_image_count
+        test_accuracy3 = num_correct_test_predictions_top3 / test_image_count
+        test_accuracy5 = num_correct_test_predictions_top5 / test_image_count
+
         print(
-            "Test loss: {:.6f}, Test accuracy: {:.4f}".format(
-                total_test_loss, test_accuracy
+            "Test loss: {:.6f}, Test accuracy 1: {:.4f}, Test accuracy 2: {:.4f}, Test accuracy 3: {:.4f}, Test accuracy 5: {:.4f}".format(
+                total_test_loss, test_accuracy1, test_accuracy2 ,test_accuracy3, test_accuracy5
             )
         )
 
