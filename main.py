@@ -1,19 +1,14 @@
-import datetime
-
+import os
+import gc
 import torch
 import torchvision
-
-torch.cuda.empty_cache()
 from datetime import datetime
 from torch.utils.data import DataLoader
-import gc
-import os
-
-from preprocess import ImageDataset
-
 from torch.optim import Adam
 from torch.nn.functional import one_hot
+from preprocess import ImageDataset
 
+torch.cuda.empty_cache()
 
 def correct_predictions(truth, predictions, top_k=3):
     count = 0
@@ -41,55 +36,74 @@ def load_model(path):
 def main():
     device = torch.device('cuda')
 
+    # set command line argument
     BATCH_SIZE = 2
     EPOCHS = 1
+    LEARNING_RATE = 1e-3
+
+    # get datasets
     train_dataset = ImageDataset(directory_path='/var/project/train_data')
     test_dataset = ImageDataset(directory_path='/var/project/test_data')
 
+    # load data
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
     test_dataloader = DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE)
 
-    train_data_count = 25249
+    # count number of images
+    train_data_count = 25248
     test_image_count = 6283
 
+    # define model
+    # model = torchvision.models.Resnet(num_classes=43)
+    # model = torchvision.models.DenseNet(num_classes=43)
     model = torchvision.models.Inception3(num_classes=43)
     model = model.to(device)
+    # show model architecture
     print(model)
 
-    # initialize our optimizer and loss function
-    opt = Adam(model.parameters(), lr=1e-3)
+    # initialize optimizer and loss function
+    opt = Adam(model.parameters(), lr=LEARNING_RATE)
     loss_fn = torch.nn.CrossEntropyLoss()
 
-    # initialize a dictionary to store training history
-    H = {"train_loss": [], "train_acc": []}
-
-    # loop over our epochs
+    # loop over the training epochs
     for e in range(0, EPOCHS):
-        model.train()
-        total_train_loss = 0
 
+        # set model in train mode
+        model.train()
+
+        # track total loss and correct predictions
+        total_train_loss = 0
         num_correct_train_predictions = 0
 
         train_steps = 0
         for x, y in iter(train_dataloader):
+            print(f'{e} {train_steps}')
+
+            # get X and Y
             classes = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
             y = one_hot(classes, num_classes=43)
             x = x / 255.0
             y = y.to(torch.float16)
             x, y = x.to(device), y.to(device)
-            # zero out the gradients, perform the backpropagation step,and update the weights
+
+            # zero out the gradients
             opt.zero_grad()
 
+            # get model predictions for this batch
             pred = model(x)[0]
-            print(f'{e} {train_steps}')
+            # calculate loss for this batch
             loss = loss_fn(pred, y)
 
+            # perform the backpropagation step
             loss.backward()
+            # update the weights
             opt.step()
 
+            # update the total loss and number of predictions
             total_train_loss += loss
-            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1))
+            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=1)
 
+            # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
             # break
@@ -98,9 +112,6 @@ def main():
         avg_train_loss = total_train_loss / train_steps
         avg_train_acc = num_correct_train_predictions / train_data_count
 
-        # update our training history
-        H["train_loss"].append(avg_train_loss)
-        H["train_acc"].append(avg_train_acc)
         # print the model training and validation information
         print("[INFO] EPOCH: {}/{}".format(e + 1, EPOCHS))
         print(
@@ -109,6 +120,7 @@ def main():
             )
         )
 
+    # save the model for future use
     save_model(model)
 
     total_test_loss = 0
@@ -117,28 +129,43 @@ def main():
     num_correct_test_predictions_top3 = 0
     num_correct_test_predictions_top5 = 0
 
+    test_steps = 0
     with torch.no_grad():
+
         # set the model in evaluation mode
         model.eval()
-        for x, y in iter(test_dataloader):
-            classes = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
-            y = one_hot(classes, num_classes=43)
 
+        # test it on the test dataset
+        for x, y in iter(test_dataloader):
+            print(f' {test_steps}')
+
+            # get X and Y
+            classes = torch.Tensor(list(map(lambda label: test_dataset.label_map[label], y))).to(torch.int64)
+            y = one_hot(classes, num_classes=43)
             x = x / 255.0
             y = y.to(torch.float16)
-
             # send the input to the device
             x, y = x.to(device), y.to(device)
 
+            # get model predictions for this batch
             pred = model(x)[0]
-            total_test_loss += loss_fn(pred, y)
-            num_correct_test_predictions_top1 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 1)
-            num_correct_test_predictions_top2 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 2)
-            num_correct_test_predictions_top3 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 3)
-            num_correct_test_predictions_top5 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), 5)
+            # calculate loss for this batch
+            loss = loss_fn(pred, y)
+
+            # update the total loss and number of predictions
+            total_test_loss += loss
+            num_correct_test_predictions_top1 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=1)
+            num_correct_test_predictions_top2 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=2)
+            num_correct_test_predictions_top3 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=3)
+            num_correct_test_predictions_top5 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=5)
+
+            # increment counter and run garbage collector
+            test_steps += 1
             gc.collect()
             # break
 
+        # calculate the average training loss and accuracy
+        avg_test_loss = total_test_loss / test_steps
         test_accuracy1 = num_correct_test_predictions_top1 / test_image_count
         test_accuracy2 = num_correct_test_predictions_top2 / test_image_count
         test_accuracy3 = num_correct_test_predictions_top3 / test_image_count
@@ -146,7 +173,7 @@ def main():
 
         print(
             "Test loss: {:.6f}, Test accuracy 1: {:.4f}, Test accuracy 2: {:.4f}, Test accuracy 3: {:.4f}, Test accuracy 5: {:.4f}".format(
-                total_test_loss, test_accuracy1, test_accuracy2, test_accuracy3, test_accuracy5
+                avg_test_loss, test_accuracy1, test_accuracy2, test_accuracy3, test_accuracy5
             )
         )
 
