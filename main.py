@@ -38,7 +38,7 @@ def main():
 
     # set command line argument
     BATCH_SIZE = 5
-    EPOCHS = 1
+    EPOCHS = 4
     LEARNING_RATE = 1e-3
 
     # get datasets
@@ -54,9 +54,9 @@ def main():
     test_image_count = 6283
 
     # define model
-    model = torchvision.models.resnet50(num_classes=43)
+    # model = torchvision.models.resnet50(num_classes=43)
     # model = torchvision.models.DenseNet(num_classes=43)
-    # model = torchvision.models.Inception3(num_classes=43)
+    model = torchvision.models.Inception3(num_classes=43)
     model = model.to(device)
     # show model architecture
     print(model)
@@ -109,7 +109,7 @@ def main():
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            break
+            # break
 
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
@@ -152,7 +152,6 @@ def main():
 
             # get model predictions for this batch
             logits = model(x)
-            print(logits.shape, y.shape)
             # calculate loss for this batch
             loss = loss_fn(logits, y)
 
@@ -166,7 +165,7 @@ def main():
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            break
+            # break
 
         # calculate the average training loss and accuracy
         avg_test_loss = total_test_loss / test_steps
