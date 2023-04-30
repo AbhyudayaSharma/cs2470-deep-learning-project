@@ -90,7 +90,10 @@ def main():
             opt.zero_grad()
 
             # get model predictions for this batch
-            logits, _ = model(x)
+
+            logits = model(x)
+            if isinstance(logits, tuple):
+                logits = logits[0]
             # calculate loss for this batch
             loss = loss_fn(logits, y)
 
