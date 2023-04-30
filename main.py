@@ -37,7 +37,7 @@ def main():
     device = torch.device('cuda')
 
     # set command line argument
-    BATCH_SIZE = 8
+    BATCH_SIZE = 5
     EPOCHS = 1
     LEARNING_RATE = 1e-3
 
