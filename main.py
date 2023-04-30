@@ -54,7 +54,7 @@ def main():
     test_image_count = 6283
 
     # define model
-    model = torchvision.models.Resnet(num_classes=43)
+    model = torchvision.models.ResNet(num_classes=43)
     # model = torchvision.models.DenseNet(num_classes=43)
     # model = torchvision.models.Inception3(num_classes=43)
     model = model.to(device)
