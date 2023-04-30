@@ -10,12 +10,12 @@ from preprocess import ImageDataset
 
 torch.cuda.empty_cache()
 
-def correct_predictions(truth, predictions, top_k=3):
+def correct_predictions(logits, predictions, top_k=3):
     count = 0
 
     _, top5_catid = torch.topk(predictions, top_k)
-    for i in range(truth.shape[0]):
-        if truth[i] in top5_catid[i]:
+    for i in range(logits.shape[0]):
+        if logits[i] in top5_catid[i]:
             count += 1
 
     return count
@@ -37,7 +37,7 @@ def main():
     device = torch.device('cuda')
 
     # set command line argument
-    BATCH_SIZE = 2
+    BATCH_SIZE = 8
     EPOCHS = 1
     LEARNING_RATE = 1e-3
 
@@ -90,9 +90,9 @@ def main():
             opt.zero_grad()
 
             # get model predictions for this batch
-            pred = model(x)[0]
+            logits, _ = model(x)[0]
             # calculate loss for this batch
-            loss = loss_fn(pred, y)
+            loss = loss_fn(logits, y)
 
             # perform the backpropagation step
             loss.backward()
@@ -101,7 +101,7 @@ def main():
 
             # update the total loss and number of predictions
             total_train_loss += loss
-            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=1)
+            num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(logits, dim=1), top_k=1)
 
             # increment counter and run garbage collector
             train_steps += 1
@@ -148,17 +148,17 @@ def main():
             x, y = x.to(device), y.to(device)
 
             # get model predictions for this batch
-            pred = model(x)#[0]
-            print(pred.shape, y.shape)
+            logits = model(x)
+            print(logits.shape, y.shape)
             # calculate loss for this batch
-            loss = loss_fn(pred, y)
+            loss = loss_fn(logits, y)
 
             # update the total loss and number of predictions
             total_test_loss += loss
-            num_correct_test_predictions_top1 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=1)
-            num_correct_test_predictions_top2 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=2)
-            num_correct_test_predictions_top3 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=3)
-            num_correct_test_predictions_top5 += correct_predictions(classes, torch.nn.functional.softmax(pred, dim=1), top_k=5)
+            num_correct_test_predictions_top1 += correct_predictions(classes, torch.nn.functional.softmax(logits, dim=1), top_k=1)
+            num_correct_test_predictions_top2 += correct_predictions(classes, torch.nn.functional.softmax(logits, dim=1), top_k=2)
+            num_correct_test_predictions_top3 += correct_predictions(classes, torch.nn.functional.softmax(logits, dim=1), top_k=3)
+            num_correct_test_predictions_top5 += correct_predictions(classes, torch.nn.functional.softmax(logits, dim=1), top_k=5)
 
             # increment counter and run garbage collector
             test_steps += 1
