@@ -106,7 +106,7 @@ def main():
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            # break
+            break
 
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
@@ -162,7 +162,7 @@ def main():
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            # break
+            break
 
         # calculate the average training loss and accuracy
         avg_test_loss = total_test_loss / test_steps
