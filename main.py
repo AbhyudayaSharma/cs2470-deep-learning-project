@@ -148,7 +148,7 @@ def main():
             x, y = x.to(device), y.to(device)
 
             # get model predictions for this batch
-            pred = model(x)[0]
+            pred = model(x)#[0]
             print(pred.shape, y.shape)
             # calculate loss for this batch
             loss = loss_fn(pred, y)
