@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torchvision.io.image import ImageReadMode
 
 
-class ImageDataset(torch.utils.data.IterableDataset):
+class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, directory_path) -> None:
         super(ImageDataset).__init__()
 

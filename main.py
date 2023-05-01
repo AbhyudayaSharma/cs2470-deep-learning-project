@@ -37,7 +37,7 @@ def main():
     device = torch.device('cuda')
 
     # set command line argument
-    BATCH_SIZE = 5
+    BATCH_SIZE = 16
     EPOCHS = 1
     LEARNING_RATE = 1e-3
 
@@ -109,7 +109,7 @@ def main():
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            # break
+            break
 
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
@@ -165,7 +165,7 @@ def main():
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            # break
+            break
 
         # calculate the average training loss and accuracy
         avg_test_loss = total_test_loss / test_steps
