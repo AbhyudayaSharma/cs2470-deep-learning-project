@@ -53,7 +53,7 @@ def clip_module():
             features = model.encode_image(x.to(device))
             labels = list(map(lambda label: train_dataset.label_map[label], y))
 
-            train_features.append(features)
+            train_features.append(features.cpu().numpy())
             train_labels.append(labels)
 
             # increment counter and run garbage collector
@@ -73,7 +73,7 @@ def clip_module():
             features = model.encode_image(x.to(device))
             labels = list(map(lambda label: train_dataset.label_map[label], y))
 
-            test_features.append(features)
+            test_features.append(features.cpu().numpy())
             test_labels.append(labels)
 
             # increment counter and run garbage collector
@@ -81,6 +81,7 @@ def clip_module():
             gc.collect()
             break
 
+    print(type(train_features), type(train_labels))
     # Perform logistic regression
     classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
     classifier.fit(train_features, train_labels)
