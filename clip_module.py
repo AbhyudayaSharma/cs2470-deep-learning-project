@@ -1,4 +1,3 @@
-import os
 import gc
 import torch
 import clip
@@ -31,8 +30,8 @@ def clip_module():
     print(model)
 
     # get datasets
-    train_dataset = ImageDataset(directory_path='/var/project/train_data', clip = preprocess)
-    test_dataset = ImageDataset(directory_path='/var/project/test_data', clip = preprocess)
+    train_dataset = ImageDataset(directory_path='/var/project/train_data', clip_preprocessing = preprocess)
+    test_dataset = ImageDataset(directory_path='/var/project/test_data', clip_preprocessing = preprocess)
 
     # load data
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
@@ -89,7 +88,8 @@ def clip_module():
     # Evaluate using the logistic regression classifier
     predictions = classifier.predict(test_features)
 
-    classes = test_labels
+    classes = torch.cat(test_labels).cpu().numpy()
+
     num_correct_test_predictions_top1 = correct_predictions(classes, predictions, top_k=1)
     num_correct_test_predictions_top2 = correct_predictions(classes, predictions, top_k=2)
     num_correct_test_predictions_top3 = correct_predictions(classes, predictions, top_k=3)

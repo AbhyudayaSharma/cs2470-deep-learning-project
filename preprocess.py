@@ -7,7 +7,6 @@ import torchvision
 
 from torch.utils.data import DataLoader
 from torchvision.io.image import ImageReadMode
-import clip
 
 class ImageDataset(torch.utils.data.IterableDataset):
     def __init__(self, directory_path, clip_preprocessing=None) -> None:
