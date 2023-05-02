@@ -45,9 +45,7 @@ class ImageDataset(torch.utils.data.IterableDataset):
 
                 else:
                     yield self.clip_preprocessing(
-                               # torch.nn.functional.pad(
                                 Image.open(os.path.join(self.directory_path, path))
-                                #, (0, 0, 874, 874), value=0)
                         ), label
             except RuntimeError as e:
                 print(path)

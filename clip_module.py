@@ -20,7 +20,7 @@ def correct_predictions(logits, predictions, top_k=3):
 def clip_module():
 
     # set command line argument
-    BATCH_SIZE = 100
+    BATCH_SIZE = 512
 
     # define model
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -48,9 +48,8 @@ def clip_module():
 
         train_steps = 0
         for x, y in iter(train_dataloader):
-            print(f' {train_steps}')
+            print("Train: ", f' {train_steps}')
 
-            print(x.shape)
             features = model.encode_image(x.to(device))
             labels = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
 
@@ -69,7 +68,7 @@ def clip_module():
 
         test_steps = 0
         for x, _ in iter(test_dataloader):
-            print(f' {test_steps}')
+            print("Test: ", f' {test_steps}')
 
             features = model.encode_image(x.to(device))
             labels = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
