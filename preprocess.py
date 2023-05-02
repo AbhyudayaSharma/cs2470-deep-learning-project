@@ -48,7 +48,7 @@ class ImageDataset(torch.utils.data.IterableDataset):
                                # torch.nn.functional.pad(
                                 Image.open(os.path.join(self.directory_path, path))
                                 #, (0, 0, 874, 874), value=0)
-                        ).unsqueeze(0), label
+                        ), label
             except RuntimeError as e:
                 print(path)
                 raise e
