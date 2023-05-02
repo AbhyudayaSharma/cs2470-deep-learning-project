@@ -22,7 +22,7 @@ def correct_predictions(truth, predictions, top_k=3):
 def clip_module():
 
     # set command line argument
-    BATCH_SIZE = 256
+    BATCH_SIZE = 512
 
     # define model
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -61,7 +61,7 @@ def clip_module():
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            break
+            # break
 
     # get testing features
     test_features = []
@@ -81,13 +81,13 @@ def clip_module():
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            break
+            # break
 
     train_features = numpy.concatenate(train_features)
     train_labels = numpy.concatenate(train_labels)
 
     # Perform logistic regression
-    classifier = LogisticRegression(verbose=1)
+    classifier = LogisticRegression(max_iter=20000, solver='saga', verbose=1)
     classifier.fit(train_features, train_labels)
 
     test_features = numpy.concatenate(test_features)
