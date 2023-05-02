@@ -9,12 +9,12 @@ from sklearn.linear_model import LogisticRegression
 
 torch.cuda.empty_cache()
 
-def correct_predictions(logits, predictions, top_k=3):
+def correct_predictions(truth, predictions, top_k=3):
     count = 0
 
     _, top5_catid = torch.topk(torch.LongTensor(predictions), top_k)
-    for i in range(len(logits)):
-        if logits[i] in top5_catid[i]:
+    for i in range(len(truth)):
+        if truth[i] in top5_catid[i]:
             count += 1
 
     return count
@@ -97,7 +97,7 @@ def clip_module():
     print(test_features.shape, test_labels.shape)
 
     # Evaluate using the logistic regression classifier
-    predictions = classifier.predict(test_features)
+    predictions = classifier.decision_function(test_features)
     print(predictions.shape)
 
     classes = test_labels

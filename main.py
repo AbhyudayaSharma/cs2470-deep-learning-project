@@ -10,12 +10,12 @@ from preprocess import ImageDataset
 
 torch.cuda.empty_cache()
 
-def correct_predictions(logits, predictions, top_k=3):
+def correct_predictions(truth, predictions, top_k=3):
     count = 0
 
     _, top5_catid = torch.topk(predictions, top_k)
-    for i in range(logits.shape[0]):
-        if logits[i] in top5_catid[i]:
+    for i in range(truth.shape[0]):
+        if truth[i] in top5_catid[i]:
             count += 1
 
     return count
