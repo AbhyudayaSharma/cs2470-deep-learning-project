@@ -61,7 +61,7 @@ def clip_module():
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            break
+            # break
 
     # get testing features
     test_features = []
@@ -81,12 +81,10 @@ def clip_module():
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            break
+            # break
 
-    print(train_features[0].shape, len(train_features), len(train_labels))
     train_features = numpy.concatenate(train_features)
     train_labels = numpy.concatenate(train_labels)
-    print(train_features.shape, train_labels.shape)
 
     # Perform logistic regression
     classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
@@ -94,11 +92,9 @@ def clip_module():
 
     test_features = numpy.concatenate(test_features)
     test_labels = numpy.concatenate(test_labels)
-    print(test_features.shape, test_labels.shape)
 
     # Evaluate using the logistic regression classifier
     predictions = classifier.decision_function(test_features)
-    print(predictions.shape)
 
     classes = test_labels
     num_correct_test_predictions_top1 = correct_predictions(classes, predictions, top_k=1)
