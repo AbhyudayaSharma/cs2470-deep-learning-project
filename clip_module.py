@@ -94,12 +94,13 @@ def clip_module():
 
     test_features = numpy.concatenate(test_features)
     test_labels = numpy.concatenate(test_labels)
+    print(test_features.shape, test_labels.shape)
 
     # Evaluate using the logistic regression classifier
     predictions = classifier.predict(test_features)
+    print(predictions.shape)
 
-    classes = test_labels #torch.cat(test_labels).cpu().numpy()
-
+    classes = test_labels
     num_correct_test_predictions_top1 = correct_predictions(classes, predictions, top_k=1)
     num_correct_test_predictions_top2 = correct_predictions(classes, predictions, top_k=2)
     num_correct_test_predictions_top3 = correct_predictions(classes, predictions, top_k=3)
