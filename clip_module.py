@@ -61,7 +61,7 @@ def clip_module():
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            # break
+            break
 
     # get testing features
     test_features = []
@@ -81,7 +81,7 @@ def clip_module():
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            # break
+            break
 
     train_features = numpy.concatenate(train_features)
     train_labels = numpy.concatenate(train_labels)
