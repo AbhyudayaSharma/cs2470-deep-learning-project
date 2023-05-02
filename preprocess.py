@@ -10,7 +10,7 @@ from torchvision.io.image import ImageReadMode
 from PIL import Image
 
 class ImageDataset(torch.utils.data.IterableDataset):
-    def __init__(self, directory_path, clip_preprocessing=None) -> None:
+    def __init__(self, directory_path, clip_preprocessing=None, use_blackbox=False) -> None:
         super(ImageDataset).__init__()
 
         self.directory_path = directory_path
@@ -27,6 +27,7 @@ class ImageDataset(torch.utils.data.IterableDataset):
         self.label_map = {val: i for i, val in enumerate(self.country_labels)}
 
         self.clip_preprocessing = clip_preprocessing
+        self.use_blackbox = use_blackbox
 
     def __iter__(self) -> None:
         # shuffle the image paths
@@ -39,10 +40,14 @@ class ImageDataset(torch.utils.data.IterableDataset):
             # return image as tensor and label
             try :
                 if self.clip_preprocessing is None:
-                    yield torchvision.io.read_image(
-                        os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
-                    ), label
 
+                    img = torchvision.io.read_image(os.path.join(self.directory_path, path), mode=ImageReadMode.RGB)
+                    if self.use_blackbox is False:
+                        yield img, label
+                    else:
+                        img[:, 451:604, 1257:1505] = 0
+                        img[:, 16:72, 1257:1505] = 0
+                        yield img, label
                 else:
                     yield self.clip_preprocessing(
                                 Image.open(os.path.join(self.directory_path, path))

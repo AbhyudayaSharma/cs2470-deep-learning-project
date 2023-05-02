@@ -33,7 +33,7 @@ def load_model(path):
     return torch.load(path)
 
 
-def main():
+def blackbox():
     device = torch.device('cuda')
 
     # set command line argument
@@ -42,8 +42,8 @@ def main():
     LEARNING_RATE = 1e-3
 
     # get datasets
-    train_dataset = ImageDataset(directory_path='/var/project/train_data')
-    test_dataset = ImageDataset(directory_path='/var/project/test_data')
+    train_dataset = ImageDataset(directory_path='/var/project/train_data', use_blackbox=True)
+    test_dataset = ImageDataset(directory_path='/var/project/test_data', use_blackbox=True)
 
     # load data
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
@@ -54,8 +54,8 @@ def main():
     test_image_count = 6283
 
     # define model
-    model = torchvision.models.resnet50(num_classes=43)   # drop weights
-    # model = torchvision.models.DenseNet(num_classes=43)
+    # model = torchvision.models.resnet50(num_classes=43)
+    model = torchvision.models.DenseNet(num_classes=43)
     # model = torchvision.models.Inception3(num_classes=43)
     model = model.to(device)
     # show model architecture
@@ -90,7 +90,6 @@ def main():
             opt.zero_grad()
 
             # get model predictions for this batch
-
             logits = model(x)
             if isinstance(logits, tuple):
                 logits = logits[0]
@@ -105,7 +104,6 @@ def main():
             # update the total loss and number of predictions
             total_train_loss += loss
             num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(logits, dim=1), top_k=1)
-
 
             # increment counter and run garbage collector
             train_steps += 1
@@ -181,6 +179,4 @@ def main():
             )
         )
 
-
-if __name__ == "__main__":
-    main()
+blackbox()
