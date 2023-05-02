@@ -50,6 +50,7 @@ def clip_module():
         for x, y in iter(train_dataloader):
             print(f' {train_steps}')
 
+            print(x.shape)
             features = model.encode_image(x.to(device))
             labels = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
 
