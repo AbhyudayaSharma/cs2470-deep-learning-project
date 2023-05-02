@@ -59,7 +59,7 @@ def clip_module():
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            # break
+            break
 
     # get testing features
     test_features = []
@@ -74,12 +74,12 @@ def clip_module():
             labels = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
 
             test_features.append(features)
-            test_labels.append(labels)
+            test_labels.append(labels.cpu().numpy())
 
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            # break
+            break
 
     # Perform logistic regression
     classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
