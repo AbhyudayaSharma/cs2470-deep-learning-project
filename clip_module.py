@@ -22,7 +22,7 @@ def correct_predictions(truth, predictions, top_k=3):
 def clip_module():
 
     # set command line argument
-    BATCH_SIZE = 512
+    BATCH_SIZE = 256
 
     # define model
     device = "cuda" if torch.cuda.is_available() else "cpu"
