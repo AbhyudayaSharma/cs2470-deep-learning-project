@@ -43,9 +43,13 @@ class ImageDataset(torch.utils.data.IterableDataset):
                     ), label
 
                 else:
-                    yield self.clip_preprocessing(torchvision.io.read_image(
-                        os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
-                    )).unsqueeze(0), label
+                    yield self.clip_preprocessing(
+                                torch.nn.functional.pad(
+                                    torchvision.io.read_image(
+                                        os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
+                                    )
+                                , (0, 0, 874, 874), value=0)
+                        ).unsqueeze(0), label
             except RuntimeError as e:
                 print(path)
                 raise e
