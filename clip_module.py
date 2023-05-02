@@ -12,7 +12,7 @@ torch.cuda.empty_cache()
 def correct_predictions(logits, predictions, top_k=3):
     count = 0
 
-    _, top5_catid = torch.topk(predictions, top_k)
+    _, top5_catid = torch.topk(torch.LongTensor(predictions), top_k)
     for i in range(len(logits)):
         if logits[i] in top5_catid[i]:
             count += 1
