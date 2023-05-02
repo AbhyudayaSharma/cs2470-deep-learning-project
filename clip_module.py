@@ -11,7 +11,7 @@ def correct_predictions(logits, predictions, top_k=3):
     count = 0
 
     _, top5_catid = torch.topk(predictions, top_k)
-    for i in range(logits.shape[0]):
+    for i in range(len(logits)):
         if logits[i] in top5_catid[i]:
             count += 1
 
@@ -51,7 +51,7 @@ def clip_module():
             print("Train: ", f' {train_steps}')
 
             features = model.encode_image(x.to(device))
-            labels = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
+            labels = list(map(lambda label: train_dataset.label_map[label], y))
 
             train_features.append(features)
             train_labels.append(labels)
@@ -71,10 +71,10 @@ def clip_module():
             print("Test: ", f' {test_steps}')
 
             features = model.encode_image(x.to(device))
-            labels = torch.Tensor(list(map(lambda label: train_dataset.label_map[label], y))).to(torch.int64)
+            labels = list(map(lambda label: train_dataset.label_map[label], y))
 
             test_features.append(features)
-            test_labels.append(labels.cpu().numpy())
+            test_labels.append(labels)
 
             # increment counter and run garbage collector
             test_steps += 1
@@ -88,7 +88,7 @@ def clip_module():
     # Evaluate using the logistic regression classifier
     predictions = classifier.predict(test_features)
 
-    classes = torch.cat(test_labels).cpu().numpy()
+    classes = test_labels #torch.cat(test_labels).cpu().numpy()
 
     num_correct_test_predictions_top1 = correct_predictions(classes, predictions, top_k=1)
     num_correct_test_predictions_top2 = correct_predictions(classes, predictions, top_k=2)
