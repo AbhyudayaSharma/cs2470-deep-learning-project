@@ -38,7 +38,7 @@ def main():
 
     # set command line argument
     BATCH_SIZE = 5
-    EPOCHS = 1
+    EPOCHS = 10
     LEARNING_RATE = 1e-3
 
     # get datasets
@@ -90,7 +90,6 @@ def main():
             opt.zero_grad()
 
             # get model predictions for this batch
-
             logits = model(x)
             if isinstance(logits, tuple):
                 logits = logits[0]
@@ -106,11 +105,10 @@ def main():
             total_train_loss += loss
             num_correct_train_predictions += correct_predictions(classes, torch.nn.functional.softmax(logits, dim=1), top_k=1)
 
-
             # increment counter and run garbage collector
             train_steps += 1
             gc.collect()
-            break
+            # break
 
         # calculate the average training loss and accuracy
         avg_train_loss = total_train_loss / train_steps
@@ -166,7 +164,7 @@ def main():
             # increment counter and run garbage collector
             test_steps += 1
             gc.collect()
-            break
+            # break
 
         # calculate the average training loss and accuracy
         avg_test_loss = total_test_loss / test_steps
