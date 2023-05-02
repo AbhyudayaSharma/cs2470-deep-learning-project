@@ -5,24 +5,23 @@ import torch
 import clip
 from torch.utils.data import DataLoader
 from preprocess import ImageDataset
+from torch.nn.functional import one_hot
 from sklearn.linear_model import LogisticRegression
 
 torch.cuda.empty_cache()
 
-def correct_predictions(logits, predictions, top_k=3):
+def correct_predictions(classes, predictions, top_k=3):
     count = 0
-
     _, top5_catid = torch.topk(torch.LongTensor(predictions), top_k)
-    for i in range(len(logits)):
-        if logits[i] in top5_catid[i]:
+    for i in range(len(classes)):
+        if classes[i] in top5_catid[i]:
             count += 1
-
     return count
 
 def clip_module():
 
     # set command line argument
-    BATCH_SIZE = 512
+    BATCH_SIZE = 234
 
     # define model
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -54,9 +53,10 @@ def clip_module():
 
             features = model.encode_image(x.to(device))
             labels = list(map(lambda label: train_dataset.label_map[label], y))
+            one_hot_labels = one_hot(labels, num_classes=43)
 
             train_features.append(features.cpu().numpy())
-            train_labels.append(labels)
+            train_labels.append(one_hot_labels)
 
             # increment counter and run garbage collector
             train_steps += 1
@@ -74,9 +74,10 @@ def clip_module():
 
             features = model.encode_image(x.to(device))
             labels = list(map(lambda label: train_dataset.label_map[label], y))
+            one_hot_labels = one_hot(labels, num_classes=43)
 
             test_features.append(features.cpu().numpy())
-            test_labels.append(labels)
+            test_labels.append(one_hot_labels)
 
             # increment counter and run garbage collector
             test_steps += 1
