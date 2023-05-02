@@ -81,7 +81,7 @@ def clip_module():
             gc.collect()
             break
 
-    print(type(train_features), type(train_labels))
+    print(train_features[0].shape, len(train_features), len(train_labels))
     # Perform logistic regression
     classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
     classifier.fit(train_features, train_labels)
