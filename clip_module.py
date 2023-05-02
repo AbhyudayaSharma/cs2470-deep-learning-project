@@ -87,7 +87,7 @@ def clip_module():
     train_labels = numpy.concatenate(train_labels)
 
     # Perform logistic regression
-    classifier = LogisticRegression(max_iter=100, solver='saga', verbose=1, n_jobs=len(os.sched_getaffinity(0)) - 1)
+    classifier = LogisticRegression(max_iter=1000, solver='saga', verbose=1, n_jobs=len(os.sched_getaffinity(0)) - 1)
     classifier.fit(train_features, train_labels)
 
     test_features = numpy.concatenate(test_features)
