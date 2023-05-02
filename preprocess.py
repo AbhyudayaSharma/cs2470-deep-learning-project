@@ -7,6 +7,7 @@ import torchvision
 
 from torch.utils.data import DataLoader
 from torchvision.io.image import ImageReadMode
+from PIL import Image
 
 class ImageDataset(torch.utils.data.IterableDataset):
     def __init__(self, directory_path, clip_preprocessing=None) -> None:
@@ -45,9 +46,7 @@ class ImageDataset(torch.utils.data.IterableDataset):
                 else:
                     yield self.clip_preprocessing(
                                # torch.nn.functional.pad(
-                                    torchvision.io.read_image(
-                                        os.path.join(self.directory_path, path), mode=ImageReadMode.RGB
-                                    )
+                                    os.path.join(self.directory_path, path)
                                 #, (0, 0, 874, 874), value=0)
                         ).unsqueeze(0), label
             except RuntimeError as e:
