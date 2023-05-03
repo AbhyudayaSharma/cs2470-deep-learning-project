@@ -27,7 +27,8 @@ def main():
         logits = model(x)
         predictions = torch.nn.functional.softmax(logits, dim=1)
         probabilities, topk_catid = torch.topk(predictions, 5)
-        pprint(zip(probabilities, map(lambda id: test_dataset.country_labels[id], topk_catid)))
+        probabilities, topk_catid = probabilities[0], topk_catid[0]
+        pprint(list(zip(probabilities, map(lambda id: test_dataset.country_labels[id], topk_catid))))
 
 
 if __name__ == '__main__':
