@@ -54,8 +54,8 @@ def main():
     test_image_count = 6283
 
     # define model
-    model = torchvision.models.resnet50(num_classes=43)   # drop weights
-    # model = torchvision.models.DenseNet(num_classes=43)
+    # model = torchvision.models.resnet50(num_classes=43)   # drop weights
+    model = torchvision.models.DenseNet(num_classes=43)
     # model = torchvision.models.Inception3(num_classes=43)
     model = model.to(device)
     # show model architecture
