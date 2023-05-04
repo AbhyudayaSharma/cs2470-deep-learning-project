@@ -43,7 +43,7 @@ def blackbox():
 
     # get datasets
     train_dataset = ImageDataset(directory_path='/var/project/train_data', use_blackbox=True)
-    test_dataset = ImageDataset(directory_path='/var/project/test_data', use_blackbox=True)
+    test_dataset = ImageDataset(directory_path='/var/project/test_data')
 
     # load data
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
